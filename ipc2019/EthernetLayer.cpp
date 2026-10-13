@@ -1,10 +1,11 @@
 ﻿#include "pch.h"
 #include "EthernetLayer.h"
-BOOL CEthernetLayer::SendArp(const arp::Mac& destination,const arp::Bytes& payload) {
+BOOL CEthernetLayer::SendArp(const arp::Mac& sender,const arp::Mac& destination,const arp::Bytes& payload) {
     if(!mp_UnderLayer||payload.size()!=28) return FALSE;
     // 60 bytes excluding the NIC-generated FCS: Ethernet minimum frame length.
+    // The Ethernet source follows the ARP sender hardware address (GARP with a new H/W address, proxy entries).
     unsigned char frame[60]{};
-    memcpy(frame,destination.data(),6); memcpy(frame+6,source.data(),6);
+    memcpy(frame,destination.data(),6); memcpy(frame+6,sender.data(),6);
     frame[12]=8; frame[13]=6; memcpy(frame+14,payload.data(),28);
     return mp_UnderLayer->Send(frame,sizeof(frame));
 }

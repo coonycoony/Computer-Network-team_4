@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <ItemGroup>
     <Filter Include="소스 파일">
@@ -71,16 +71,10 @@
     <ClCompile Include="LayerManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ChatAppLayer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="EthernetLayer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="NILayer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="FileAppLayer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -99,4 +93,11 @@
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
-<ItemGroup><ClCompile Include="ARPLayer.cpp" /><ClCompile Include="AdapterInfo.cpp" /><ClInclude Include="ARPLayer.h" /><ClInclude Include="ArpProtocol.h" /><ClInclude Include="AdapterInfo.h" /></ItemGroup></Project>
+  <ItemGroup>
+    <ClCompile Include="ARPLayer.cpp" />
+    <ClCompile Include="AdapterInfo.cpp" />
+    <ClInclude Include="ARPLayer.h" />
+    <ClInclude Include="ArpProtocol.h" />
+    <ClInclude Include="AdapterInfo.h" />
+  </ItemGroup>
+</Project>

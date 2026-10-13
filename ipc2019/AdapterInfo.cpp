@@ -10,6 +10,11 @@ bool ParseIp(const CString& text,arp::Ip& ip){
     if(swscanf_s(t,L"%u.%u.%u.%u%n",&a,&b,&c,&d,&end)!=4||end!=t.GetLength()||a>255||b>255||c>255||d>255)return false;
     ip={(unsigned char)a,(unsigned char)b,(unsigned char)c,(unsigned char)d};return arp::validIp(ip);
 }
+bool ParseMac(const CString& text,arp::Mac& mac){
+    CString t(text);t.Trim();t.Replace(L'-',L':');unsigned v[6];int end=0;
+    if(t.GetLength()!=17||swscanf_s(t,L"%2x:%2x:%2x:%2x:%2x:%2x%n",&v[0],&v[1],&v[2],&v[3],&v[4],&v[5],&end)!=6||end!=17)return false;
+    for(int i=0;i<6;++i)mac[i]=(unsigned char)v[i];return arp::validMac(mac);
+}
 bool OnLink(const AdapterInfo& a,const arp::Ip& ip){
     uint32_t local=0,target=0;for(int i=0;i<4;++i){local=(local<<8)|a.ip[i];target=(target<<8)|ip[i];}
     uint32_t mask=a.prefix?0xffffffffu<<(32-a.prefix):0;
@@ -33,7 +38,7 @@ std::vector<AdapterInfo> EnumerateAdapters(const std::vector<std::string>& devic
             if(!arp::validIp(item.ip)||!arp::validMac(item.mac))continue;
             MIB_IF_ROW2 row{};row.InterfaceLuid=a->Luid;if(GetIfEntry2(&row)==NO_ERROR)item.hardware=row.InterfaceAndOperStatusFlags.HardwareInterface;
             item.prefix=u->OnLinkPrefixLength;item.index=a->IfIndex;item.up=a->OperStatus==IfOperStatusUp;item.wifi=a->IfType==IF_TYPE_IEEE80211;
-            item.label.Format(L"%s | %s | %s/%u%s%s",a->FriendlyName,item.wifi?L"Wi-Fi":L"Ethernet",IpText(item.ip).GetString(),item.prefix,item.up?L"":L" | 연결 끊김",device.empty()?L" | 캡처 불가":L"");
+            item.name=a->FriendlyName;item.label.Format(L"%s | %s | %s/%u%s%s",a->FriendlyName,item.wifi?L"Wi-Fi":L"Ethernet",IpText(item.ip).GetString(),item.prefix,item.up?L"":L" | 연결 끊김",device.empty()?L" | 캡처 불가":L"");
             result.push_back(item);
         }
     }
